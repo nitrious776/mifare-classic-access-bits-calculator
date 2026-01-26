@@ -4,44 +4,46 @@
 ![GitHub license](https://img.shields.io/github/license/kevzka/mifare-classic-access-bits-calculator?style=for-the-badge&color=38bdf8)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-10b981?style=for-the-badge)
 
-> **"Stop bricking your RFID cards!"** > Alat web-based paling presisi untuk mendekode dan mengkodekan Access Bits Mifare Classic (Bytes 6, 7, 8) tanpa ribet buka datasheet manual.
+> **"Stop bricking your RFID cards!"** > The most precise web-based tool to decode and encode Mifare Classic Access Bits (Bytes 6, 7, 8) without the headache of manual datasheet calculations.
 
 ---
 
-## 🛠 Mengapa Kamu Membutuhkan Alat Ini?
-Menulis *Access Bits* ke kartu Mifare adalah proses yang berisiko tinggi. Salah satu bit saja, kartu/sektor Anda akan **terkunci selamanya (Bricked)**. 
+## 🛠 Why Do You Need This Tool?
+Writing *Access Bits* to a Mifare card is a high-risk operation. A single bit error can lead to a **permanently locked sector (Bricked Card)**. 
 
-Alat ini hadir untuk:
-- ✅ **Menghilangkan Tebakan**: Lihat hasil konfigurasi Anda secara visual sebelum melakukan *write*.
-- ✅ **Akurasi 100%**: Menggunakan algoritma inversi bit resmi sesuai datasheet NXP.
-- ✅ **Efisiensi Waktu**: Tidak perlu menghitung manual bit-per-bit yang membingungkan.
+This tool is designed to:
+- ✅ **Eliminate Guesswork**: Preview your configuration visually before performing a write.
+- ✅ **100% Logic Accuracy**: Built using official NXP datasheet bit-inversion algorithms.
+- ✅ **Save Time**: Skip the confusing manual bit-mapping and hex conversions.
 
-## ✨ Fitur Utama
-- 🎨 **Deep Dark Mode UI**: Tampilan modern, futuristik, dan nyaman di mata.
-- 🔍 **Instant Decoder**: Tempelkan 6 karakter Hex, dan lihat semua hak akses Key A, Key B, dan Bits terbuka secara transparan.
-- 🏗️ **Visual Encoder**: Klik dan ubah bit langsung di tabel, lalu salin Hex yang dihasilkan.
-- 📑 **Integrated Cheat Sheet**: Referensi aturan lengkap untuk Data Blocks & Sector Trailer langsung di layar Anda.
-- 🚨 **Safety Highlighting**: Peringatan otomatis jika Anda menyetel konfigurasi yang berisiko tinggi (Akses "Never").
+## ✨ Key Features
+- 🎨 **Deep Dark Mode UI**: Modern, futuristic, and developer-friendly interface.
+- 🔍 **Instant Decoder**: Paste your 6-character Hex string to reveal all Key A, Key B, and Access Bit permissions instantly.
+- 🏗️ **Visual Encoder**: Modify C1, C2, and C3 bits directly in the table and get the encoded Hex string immediately.
+- 📑 **Integrated Cheat Sheet**: Comprehensive rule references for both Data Blocks and Sector Trailers right on your screen.
+- 🚨 **Safety Highlighting**: Automatic visual warnings (Red highlights) for high-risk "Never" access configurations.
 
-## 📸 Preview Tampilan
-!
 
-## 🚀 Cara Mulai Cepat
-1. Masukkan nilai **Access Bytes** (Default: `FF0780`).
-2. Tekan **Decode Hex**.
-3. Sesuaikan bit pada tabel sesuai kebutuhan sistem Anda.
-4. Klik **Re-Encode** dan gunakan hasilnya di aplikasi RFID Anda (MFRC522, ACR122U, Libnfc, dll).
 
-## 💡 Beri Bintang Jika Bermanfaat! ⭐
-Jika alat ini menyelamatkan kartu Anda dari kerusakan atau mempermudah pekerjaan Anda, **tolong beri repositori ini Star!** Itu adalah bentuk dukungan gratis yang sangat berarti bagi pengembang untuk terus memperbarui alat ini.
+## 📸 Interface Preview
+![Preview](preview.jpg)
+
+## 🚀 Quick Start
+1. Enter your **Access Bytes** (Default: `FF0780`).
+2. Click **Decode Hex**.
+3. Adjust the bits in the table to suit your system requirements.
+4. Click **Re-Encode** and use the generated Hex in your RFID application (MFRC522, ACR122U, Libnfc, etc.).
+
+## 💡 Give it a Star! ⭐
+If this tool saved your card from being bricked or simplified your workflow, **please give this repository a Star!** It’s a free way to support the developer and keep this project updated.
 
 ---
 
-## 🤝 Kontribusi
-Punya saran fitur atau menemukan bug? Jangan ragu untuk membuka [Issue](https://github.com/kevzka/mifare-classic-access-bits-calculator/issues) atau melakukan *Pull Request*. Kontribusi Anda sangat dihargai!
+## 🤝 Contributing
+Have a feature suggestion or found a bug? Feel free to open an [Issue](https://github.com/kevzka/mifare-classic-access-bits-calculator/issues) or submit a **Pull Request**. Your contributions are highly appreciated!
 
-## 📜 Lisensi
-Dilisensikan di bawah **MIT License**. Gunakan dengan bijak.
+## 📜 License
+Licensed under the **MIT License**. Use it wisely.
 
 ---
 *Developed with ☕ and passion for the RFID community.*
