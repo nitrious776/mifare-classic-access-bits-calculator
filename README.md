@@ -1,7 +1,7 @@
 # 🔐 Mifare Classic Access Bits Calculator
 
-![GitHub Repo stars](https://img.shields.io/github/stars/username/repo?style=for-the-badge&color=ffd700)
-![GitHub license](https://img.shields.io/github/license/username/repo?style=for-the-badge&color=38bdf8)
+![GitHub Repo stars](https://img.shields.io/github/stars/kevzka/mifare-classic-access-bits-calculator?style=for-the-badge&color=ffd700)
+![GitHub license](https://img.shields.io/github/license/kevzka/mifare-classic-access-bits-calculator?style=for-the-badge&color=38bdf8)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-10b981?style=for-the-badge)
 
 > **"Stop bricking your RFID cards!"** > Alat web-based paling presisi untuk mendekode dan mengkodekan Access Bits Mifare Classic (Bytes 6, 7, 8) tanpa ribet buka datasheet manual.
@@ -38,7 +38,7 @@ Jika alat ini menyelamatkan kartu Anda dari kerusakan atau mempermudah pekerjaan
 ---
 
 ## 🤝 Kontribusi
-Punya saran fitur atau menemukan bug? Jangan ragu untuk membuka [Issue](https://github.com/username/repo/issues) atau melakukan *Pull Request*. Kontribusi Anda sangat dihargai!
+Punya saran fitur atau menemukan bug? Jangan ragu untuk membuka [Issue](https://github.com/kevzka/mifare-classic-access-bits-calculator/issues) atau melakukan *Pull Request*. Kontribusi Anda sangat dihargai!
 
 ## 📜 Lisensi
 Dilisensikan di bawah **MIT License**. Gunakan dengan bijak.
