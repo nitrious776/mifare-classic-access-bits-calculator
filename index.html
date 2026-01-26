@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mifare Classic Access Bits Decoder</title>
+    <style>
+        :root {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --primary: #38bdf8;
+            --accent: #10b981;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --error: #ef4444;
+        }
+
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            background: var(--bg-body); 
+            color: var(--text-main); 
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        .card { 
+            background: var(--bg-card); 
+            padding: 2rem; 
+            border-radius: 12px; 
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        h1, h2, h3 { color: var(--primary); margin-top: 0; }
+        .subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+
+        /* Input Section */
+        .input-group { 
+            display: flex; gap: 12px; margin-bottom: 30px; align-items: center; 
+            background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 10px;
+        }
+        
+        input[type="text"] { 
+            background: #0f172a; border: 1px solid var(--border); 
+            color: var(--accent); padding: 10px 15px; border-radius: 6px; 
+            font-family: 'JetBrains Mono', monospace; font-size: 1.2rem;
+            outline: none;
+        }
+        input[type="text"]:focus { border-color: var(--primary); }
+
+        button { 
+            padding: 10px 24px; background: var(--primary); color: #0f172a; 
+            border: none; border-radius: 6px; font-weight: 700; cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* Tables */
+        .table-container { overflow-x: auto; margin-bottom: 40px; }
+        table { width: 100%; border-collapse: collapse; background: #1e293b; }
+        th { 
+            background: #334155; color: var(--primary); font-size: 0.7rem; 
+            text-transform: uppercase; padding: 12px; border: 1px solid var(--border);
+        }
+        td { padding: 10px; border: 1px solid var(--border); text-align: center; font-size: 0.85rem; }
+        
+        .c-input { 
+            width: 35px !important; text-align: center; font-weight: bold; 
+            color: var(--accent) !important; padding: 5px !important; font-size: 1rem !important;
+        }
+
+        /* Rules Reference */
+        .rules-section { display: grid; grid-template-columns: 1fr; gap: 25px; margin-top: 30px; }
+        .rule-box { 
+            background: rgba(15, 23, 42, 0.4); padding: 20px; border-radius: 8px; 
+            border: 1px solid var(--border); 
+        }
+        .rule-box h4 { margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        
+        .ref-table th { font-size: 0.65rem; background: #0f172a; }
+        .ref-table td { font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1>Mifare Classic Access Bits Tool</h1>
+        <p class="subtitle">Official NXP Logic - Hex to Access Conditions Decoder</p>
+
+        <form id="HexForm" class="input-group">
+            <div style="display:flex; flex-direction:column;">
+                <label style="font-size: 0.8rem; margin-bottom: 5px;">Access Bytes (Byte 6, 7, 8)</label>
+                <input type="text" id="hexInput" value="FF0780" maxlength="6">
+            </div>
+            <button type="submit">Decode Hex</button>
+            <div style="margin-left: auto; text-align: right;">
+                <div style="font-size: 0.7rem; color: var(--text-muted);">Current Value:</div>
+                <div id="HexDisplay" style="font-size: 1.5rem; font-weight: 800; color: var(--accent);">FF0780</div>
+            </div>
+        </form>
+
+        <form id="BitsForm">
+            <h3>1. Data Blocks (Block 0, 1, 2)</h3>
+            <div class="table-container">
+                <table id="dataBlockTable">
+                    <thead>
+                        <tr>
+                            <th>Block</th>
+                            <th>C1</th><th>C2</th><th>C3</th>
+                            <th>Read</th><th>Write</th><th>Increment</th><th>Dec / Trans / Rest</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <h3>2. Sector Trailer (Block 3)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">C1</th><th rowspan="2">C2</th><th rowspan="2">C3</th>
+                            <th colspan="2">Key A</th><th colspan="2">Access Bits</th><th colspan="2">Key B</th>
+                        </tr>
+                        <tr>
+                            <th>Read</th><th>Write</th><th>Read</th><th>Write</th><th>Read</th><th>Write</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trailerBody"></tbody>
+                </table>
+            </div>
+            
+            <button type="submit" style="background: var(--accent); width: 100%; margin-bottom: 40px;">
+                RE-ENCODE: Table to Hex
+            </button>
+        </form>
+
+        <div class="rules-section">
+            <div class="rule-box">
+                <h4>Data Block Rules Reference</h4>
+                <table class="ref-table">
+                    <thead>
+                        <tr><th>C1 C2 C3</th><th>Read</th><th>Write</th><th>Increment</th><th>Dec / Tr / Re</th></tr>
+                    </thead>
+                    <tbody id="refData"></tbody>
+                </table>
+            </div>
+
+            <div class="rule-box">
+                <h4>Sector Trailer Rules Reference</h4>
+                <table class="ref-table">
+                    <thead>
+                        <tr><th>C1 C2 C3</th><th>R KeyA</th><th>W KeyA</th><th>R Bits</th><th>W Bits</th><th>R KeyB</th><th>W KeyB</th></tr>
+                    </thead>
+                    <tbody id="refTrailer"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// --- DATASHEET RULES ---
+const DATA_RULES = {
+    '000': ['Key A|B', 'Key A|B', 'Key A|B', 'Key A|B'],
+    '010': ['Key A|B', 'Never', 'Never', 'Never'],
+    '100': ['Key A|B', 'Key B', 'Never', 'Never'],
+    '110': ['Key A|B', 'Key B', 'Key B', 'Key A|B'],
+    '001': ['Key A|B', 'Never', 'Never', 'Key A|B'],
+    '011': ['Key B', 'Key B', 'Never', 'Never'],
+    '101': ['Key B', 'Never', 'Never', 'Never'],
+    '111': ['Never', 'Never', 'Never', 'Never']
+};
+
+const TRAILER_RULES = {
+    '000': ['Never', 'Key A', 'Key A', 'Never', 'Key A', 'Key A'],
+    '010': ['Never', 'Never', 'Key A', 'Never', 'Key A', 'Never'],
+    '100': ['Never', 'Key B', 'Key A|B', 'Never', 'Never', 'Key B'],
+    '110': ['Never', 'Never', 'Key A|B', 'Never', 'Never', 'Never'],
+    '001': ['Never', 'Key A', 'Key A', 'Key A', 'Key A', 'Key A'],
+    '011': ['Never', 'Key B', 'Key B', 'Key B', 'Never', 'Key B'],
+    '101': ['Never', 'Never', 'Key A|B', 'Key B', 'Never', 'Never'],
+    '111': ['Never', 'Never', 'Key A|B', 'Never', 'Never', 'Never']
+};
+
+// --- INITIALIZATION ---
+document.addEventListener("DOMContentLoaded", () => {
+    renderBaseUI();
+    decodeHex("FF0780");
+});
+
+function renderBaseUI() {
+    // Render working rows
+    document.querySelector('#dataBlockTable tbody').innerHTML = [0, 1, 2].map(i => `
+        <tr data-block="${i}">
+            <td>${i}</td>
+            <td><input type="text" class="c-input c1" maxlength="1"></td>
+            <td><input type="text" class="c-input c2" maxlength="1"></td>
+            <td><input type="text" class="c-input c3" maxlength="1"></td>
+            <td class="res"></td><td class="res"></td><td class="res"></td><td class="res"></td>
+        </tr>
+    `).join('');
+
+    document.getElementById('trailerBody').innerHTML = `
+        <tr data-block="3">
+            <td><input type="text" class="c-input c1" maxlength="1"></td>
+            <td><input type="text" class="c-input c2" maxlength="1"></td>
+            <td><input type="text" class="c-input c3" maxlength="1"></td>
+            <td class="res"></td><td class="res"></td><td class="res"></td><td class="res"></td><td class="res"></td><td class="res"></td>
+        </tr>
+    `;
+
+    // Render Reference Tables
+    const dRef = document.getElementById('refData');
+    Object.entries(DATA_RULES).forEach(([bits, r]) => {
+        dRef.innerHTML += `<tr><td><strong>${bits}</strong></td>${r.map(v=>`<td>${v}</td>`).join('')}</tr>`;
+    });
+
+    const tRef = document.getElementById('refTrailer');
+    Object.entries(TRAILER_RULES).forEach(([bits, r]) => {
+        tRef.innerHTML += `<tr><td><strong>${bits}</strong></td>${r.map(v=>`<td>${v}</td>`).join('')}</tr>`;
+    });
+}
+
+// --- CORE LOGIC ---
+function decodeHex(hex) {
+    if(!/^[0-9A-Fa-f]{6}$/.test(hex)) return alert("Invalid Hex Format!");
+    
+    const b = [
+        parseInt(hex.substr(0, 2), 16), 
+        parseInt(hex.substr(2, 2), 16), 
+        parseInt(hex.substr(4, 2), 16)
+    ];
+
+    // Extraction based on Mifare Classic 1K Datasheet
+    // C1 is in Byte 7, C2 & C3 are in Byte 8
+    const bits = {
+        c1: [(b[1]>>4)&1, (b[1]>>5)&1, (b[1]>>6)&1, (b[1]>>7)&1],
+        c2: [b[2]&1, (b[2]>>1)&1, (b[2]>>2)&1, (b[2]>>3)&1],
+        c3: [(b[2]>>4)&1, (b[2]>>5)&1, (b[2]>>6)&1, (b[2]>>7)&1]
+    };
+
+    updateUI(bits);
+    document.getElementById('HexDisplay').innerText = hex.toUpperCase();
+}
+
+function updateUI(bits) {
+    [0,1,2,3].forEach(i => {
+        const row = document.querySelector(`tr[data-block="${i}"]`);
+        const combo = `${bits.c1[i]}${bits.c2[i]}${bits.c3[i]}`;
+        const resCells = row.querySelectorAll('.res');
+        
+        row.querySelector('.c1').value = bits.c1[i];
+        row.querySelector('.c2').value = bits.c2[i];
+        row.querySelector('.c3').value = bits.c3[i];
+
+        const ruleSet = (i < 3) ? DATA_RULES[combo] : TRAILER_RULES[combo];
+        resCells.forEach((cell, idx) => {
+            cell.innerText = ruleSet[idx];
+            // Highlight 'Never'
+            cell.style.color = ruleSet[idx] === 'Never' ? 'var(--error)' : 'var(--text-main)';
+        });
+    });
+}
+
+// --- EVENTS ---
+document.getElementById('HexForm').onsubmit = (e) => {
+    e.preventDefault();
+    decodeHex(document.getElementById('hexInput').value);
+};
+
+document.getElementById('BitsForm').onsubmit = (e) => {
+    e.preventDefault();
+    const c = {1: [], 2: [], 3: []};
+    document.querySelectorAll('tr[data-block]').forEach(row => {
+        c[1].push(parseInt(row.querySelector('.c1').value) || 0);
+        c[2].push(parseInt(row.querySelector('.c2').value) || 0);
+        c[3].push(parseInt(row.querySelector('.c3').value) || 0);
+    });
+
+    // Mifare Bit Manipulation (Inverted bits are required for Byte 6 and half of Byte 7)
+    const b6 = ((!c[2][3]&1)<<7)|((!c[2][2]&1)<<6)|((!c[2][1]&1)<<5)|((!c[2][0]&1)<<4)|((!c[1][3]&1)<<3)|((!c[1][2]&1)<<2)|((!c[1][1]&1)<<1)|(!c[1][0]&1);
+    const b7 = ((c[1][3]&1)<<7)|((c[1][2]&1)<<6)|((c[1][1]&1)<<5)|((c[1][0]&1)<<4)|((!c[3][3]&1)<<3)|((!c[3][2]&1)<<2)|((!c[3][1]&1)<<1)|(!c[3][0]&1);
+    const b8 = ((c[3][3]&1)<<7)|((c[3][2]&1)<<6)|((c[3][1]&1)<<5)|((c[3][0]&1)<<4)|((c[2][3]&1)<<3)|((c[2][2]&1)<<2)|((c[2][1]&1)<<1)|(c[2][0]&1);
+
+    const finalHex = [b6, b7, b8].map(val => (val >>> 0 & 0xFF).toString(16).padStart(2, '0')).join('').toUpperCase();
+    document.getElementById('hexInput').value = finalHex;
+    decodeHex(finalHex);
+};
+</script>
+</body>
+</html>
